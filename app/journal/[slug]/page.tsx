@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { SectionHeading } from "@/components/section-heading";
-import { findJournalEntry } from "@/data/journal";
+import { findJournalEntry, journalEntries } from "@/data/journal";
 
 type Props = {
   params: { slug: string };
@@ -22,6 +22,12 @@ export async function generateMetadata({ params }: Props) {
     title: entry.title,
     description: entry.excerpt,
   };
+}
+
+export function generateStaticParams() {
+  return journalEntries.map((entry) => ({
+    slug: entry.slug,
+  }));
 }
 
 export default async function JournalDetailPage({ params }: Props) {

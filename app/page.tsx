@@ -10,6 +10,7 @@ import { journalEntries } from "@/data/journal";
 export default function Home() {
   const featuredPresets = presets.slice(0, 3);
   const featuredJournal = journalEntries.slice(0, 2);
+  const assetPrefix = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
   return (
     <>
@@ -21,7 +22,7 @@ export default function Home() {
           alt: "MOPEZ City-01 프리셋을 타고 도심을 주행하는 라이더",
         }}
         video={{
-          src: "/img/hero_main.mp4",
+          src: `${assetPrefix}/img/hero_main.mp4`,
           poster: presets[0].heroImage,
           alt: "도심을 질주하는 MOPEZ 전기자전거 라이딩 영상",
         }}

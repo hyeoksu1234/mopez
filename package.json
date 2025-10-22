@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack -p 3004",
     "build": "next build --turbopack",
     "export": "next build --turbopack",
-    "deploy": "npm run build && rm -rf docs && cp -R out docs",
+    "deploy": "npm run build && rm -rf docs && cp -R out docs && touch docs/.nojekyll",
     "start": "next start -p 3004",
     "lint": "eslint"
   },

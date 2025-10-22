@@ -14,7 +14,7 @@ export default function JournalPage() {
       <SectionHeading
         eyebrow="Journal"
         title="뉴스 & 스토리"
-        description="사진 70%, 텍스트 30% 비율을 지키며 MOPEZ의 최신 소식과 라이더 경험을 전달합니다."
+        description="라이더 경험과 모듈 소식을 담은 저널을 카드 뉴스 형식으로 만나보세요."
       />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {journalEntries.map((entry) => (

@@ -16,6 +16,11 @@ const navigation = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const assetPrefix =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_BASE_PATH ?? ""
+      : "";
+  const logoSrc = assetPrefix ? `${assetPrefix}/img/logo.png` : "/img/logo.png";
 
   useEffect(() => {
     if (menuOpen) {
@@ -34,7 +39,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/img/logo.png"
+            src={logoSrc}
             alt="MOPEZ"
             width={132}
             height={32}
@@ -102,7 +107,7 @@ export function SiteHeader() {
             <div className="mb-10 flex items-center justify-between">
               <Link href="/" onClick={() => setMenuOpen(false)}>
                 <Image
-                  src="/img/logo.png"
+                  src={logoSrc}
                   alt="MOPEZ"
                   width={132}
                   height={32}

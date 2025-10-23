@@ -13,8 +13,14 @@ type HeroVisualProps = {
   };
   video?: {
     src: string;
+    type?: string;
     poster?: string;
     alt?: string;
+    preload?: "auto" | "metadata" | "none";
+    sources?: Array<{
+      src: string;
+      type: string;
+    }>;
   };
   primaryCta?: {
     label: string;
@@ -37,6 +43,29 @@ export function HeroVisual({
   const mediaAlt = video?.alt ?? image?.alt ?? title;
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
+  const composedVideoSources =
+    video &&
+    [
+      ...(video.sources ?? []),
+      video.src
+        ? {
+            src: video.src,
+            type: video.type ?? "video/mp4",
+          }
+        : null,
+    ].filter(
+      (source): source is { src: string; type: string } => Boolean(source)
+    );
+  const videoSources =
+    composedVideoSources &&
+    Array.from(
+      new Map(
+        composedVideoSources.map((source) => [
+          `${source.type}-${source.src}`,
+          source,
+        ])
+      ).values()
+    );
 
   useEffect(() => {
     const card = cardRef.current;
@@ -70,16 +99,19 @@ export function HeroVisual({
       <div className="relative h-screen min-h-[520px] w-full overflow-hidden bg-carbon">
         {video ? (
           <video
-            src={video.src}
             poster={video.poster ?? image?.src}
             muted
             loop
             autoPlay
             playsInline
-            preload="metadata"
+            preload={video.preload ?? "auto"}
             className="h-full w-full object-cover"
             aria-label={mediaAlt}
-          />
+          >
+            {videoSources?.map(({ src, type }) => (
+              <source key={`${type}-${src}`} src={src} type={type} />
+            ))}
+          </video>
         ) : (
           image && (
             <Image

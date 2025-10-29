@@ -34,6 +34,23 @@ function getTagVariant(id: string, index: number): TagVariant {
   return tagVariants[(hash + index) % tagVariants.length];
 }
 
+const strokeVariants: Array<string | null> = [
+  null,
+  null,
+  "border-[6px] border-electric-blue",
+  "outline outline-[4px] outline-electric-blue outline-offset-[6px]",
+  "ring-4 ring-electric-blue ring-offset-[6px] ring-offset-soft-gray",
+];
+
+function getStrokeVariant(id: string, index: number): string | null {
+  const hash = Array.from(id).reduce(
+    (acc, char) => acc + (char.charCodeAt(0) % 13),
+    0,
+  );
+
+  return strokeVariants[(hash + index * 3) % strokeVariants.length];
+}
+
 export function PhotoMosaic({ photos }: PhotoMosaicProps) {
   return (
     <div className="grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[190px] md:grid-cols-4 md:gap-4 lg:auto-rows-[220px]">
@@ -43,6 +60,7 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
           photo.id,
           index,
         );
+        const strokeClass = getStrokeVariant(photo.id, index);
 
         const tags: Array<{ id: string; label: string; className: string }> = [];
         if (showModuleTag) {
@@ -67,7 +85,13 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
         return (
           <figure
             key={photo.id}
-            className={`relative overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_6px_18px_rgba(17,17,17,0.12)] transition hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] ${tileClass}`}
+            className={[
+              "relative overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_6px_18px_rgba(17,17,17,0.12)] transition hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none",
+              tileClass,
+              strokeClass,
+            ]
+              .filter(Boolean)
+              .join(" ")}
           >
             <Image
               src={photo.src}

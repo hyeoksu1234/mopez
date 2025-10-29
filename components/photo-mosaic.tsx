@@ -34,16 +34,26 @@ function getTagVariant(id: string, index: number): TagVariant {
   return tagVariants[(hash + index) % tagVariants.length];
 }
 
+const DEFAULT_STROKE_CLASS = "border-[6px] border-electric-blue";
+
 const strokeVariants: Array<string | null> = [
   null,
   null,
-  "border-[6px] border-electric-blue",
-  "outline outline-[4px] outline-electric-blue outline-offset-[6px]",
-  "ring-4 ring-electric-blue ring-offset-[6px] ring-offset-soft-gray",
+  DEFAULT_STROKE_CLASS,
+  DEFAULT_STROKE_CLASS,
+  DEFAULT_STROKE_CLASS,
 ];
 
-function getStrokeVariant(id: string, index: number): string | null {
-  const hash = Array.from(id).reduce(
+function getStrokeVariant(photo: PhotoTile, index: number): string | null {
+  if (photo.disableStroke) {
+    return null;
+  }
+
+  if (photo.forceStroke) {
+    return DEFAULT_STROKE_CLASS;
+  }
+
+  const hash = Array.from(photo.id).reduce(
     (acc, char) => acc + (char.charCodeAt(0) % 13),
     0,
   );
@@ -60,7 +70,7 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
           photo.id,
           index,
         );
-        const strokeClass = getStrokeVariant(photo.id, index);
+        const strokeClass = getStrokeVariant(photo, index);
 
         const tags: Array<{ id: string; label: string; className: string }> = [];
         if (showModuleTag) {

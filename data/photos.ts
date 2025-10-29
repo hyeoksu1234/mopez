@@ -5,6 +5,8 @@ export type PhotoTile = {
   moduleLabel: string;
   scene: string;
   layout: "square" | "portrait" | "landscape";
+  forceStroke?: boolean;
+  disableStroke?: boolean;
 };
 
 export const photoTiles: PhotoTile[] = [
@@ -15,6 +17,7 @@ export const photoTiles: PhotoTile[] = [
     moduleLabel: "Frame A",
     scene: "NightRide",
     layout: "portrait",
+    forceStroke: true,
   },
   {
     id: "urban-turn",
@@ -47,6 +50,7 @@ export const photoTiles: PhotoTile[] = [
     moduleLabel: "720Wh",
     scene: "Urban",
     layout: "square",
+    forceStroke: true,
   },
   {
     id: "trail-leap",
@@ -55,6 +59,7 @@ export const photoTiles: PhotoTile[] = [
     moduleLabel: "Trail Tire",
     scene: "Trail",
     layout: "portrait",
+    disableStroke: true,
   },
   {
     id: "commute-morning",
@@ -71,6 +76,7 @@ export const photoTiles: PhotoTile[] = [
     moduleLabel: "Chrome Silver",
     scene: "Studio",
     layout: "square",
+    disableStroke: true,
   },
   {
     id: "sunset-curve",
@@ -95,6 +101,7 @@ export const photoTiles: PhotoTile[] = [
     moduleLabel: "Race Pack",
     scene: "Track",
     layout: "landscape",
+    disableStroke: true,
   },
   {
     id: "mountain-glow",

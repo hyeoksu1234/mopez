@@ -31,7 +31,7 @@ export default function Home() {
           ],
           poster: presets[0].heroImage,
           alt: "도심을 질주하는 MOPEZ 전기자전거 라이딩 영상",
-          preload: "auto",
+          preload: "metadata",
         }}
         primaryCta={{ label: "프리셋 살펴보기", href: "/bikes/lineup" }}
         secondaryCta={{ label: "브랜드 스토리", href: "/story" }}

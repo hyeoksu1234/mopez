@@ -41,8 +41,10 @@ export function HeroVisual({
   secondaryCta,
 }: HeroVisualProps) {
   const mediaAlt = video?.alt ?? image?.alt ?? title;
+  const heroRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(() => !video);
   const composedVideoSources =
     video &&
     [
@@ -66,6 +68,59 @@ export function HeroVisual({
         ])
       ).values()
     );
+
+  useEffect(() => {
+    if (!video) return;
+
+    if (!image) {
+      setShouldLoadVideo(true);
+    }
+
+    if (typeof window === "undefined") return;
+
+    const prefersReducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    const connection = (navigator as Navigator & {
+      connection?: {
+        saveData?: boolean;
+        effectiveType?: string;
+      };
+    }).connection;
+
+    const isConnectionLimited =
+      Boolean(connection?.saveData) ||
+      (connection?.effectiveType
+        ? ["slow-2g", "2g"].includes(connection.effectiveType)
+        : false);
+
+    if (prefersReducedMotion || isConnectionLimited) {
+      return;
+    }
+
+    const heroSection = heroRef.current;
+    if (!heroSection) {
+      setShouldLoadVideo(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoadVideo(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "200px 0px", threshold: 0.1 }
+    );
+
+    observer.observe(heroSection);
+
+    return () => observer.disconnect();
+  }, [video, image]);
 
   useEffect(() => {
     const card = cardRef.current;
@@ -93,18 +148,23 @@ export function HeroVisual({
     "transition-all duration-700 ease-out transform-gpu will-change-transform",
     hasEntered ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0",
   ].join(" ");
+  const fallbackMediaSrc = image?.src ?? video?.poster;
+  const shouldShowVideo = Boolean(video && shouldLoadVideo);
 
   return (
     <section className="relative isolate w-full">
-      <div className="relative h-screen min-h-[520px] w-full overflow-hidden bg-carbon">
-        {video ? (
+      <div
+        ref={heroRef}
+        className="relative h-screen min-h-[520px] w-full overflow-hidden bg-carbon"
+      >
+        {shouldShowVideo ? (
           <video
             poster={video.poster ?? image?.src}
             muted
             loop
             autoPlay
             playsInline
-            preload={video.preload ?? "auto"}
+            preload={video.preload ?? "metadata"}
             className="h-full w-full object-cover"
             aria-label={mediaAlt}
           >
@@ -112,17 +172,15 @@ export function HeroVisual({
               <source key={`${type}-${src}`} src={src} type={type} />
             ))}
           </video>
-        ) : (
-          image && (
-            <Image
-              src={image.src}
-              alt={mediaAlt}
-              fill
-              className="object-cover"
-              priority
-            />
-          )
-        )}
+        ) : fallbackMediaSrc ? (
+          <Image
+            src={fallbackMediaSrc}
+            alt={mediaAlt}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : null}
         <div
           className="absolute inset-0 bg-gradient-to-b from-carbon/10 via-carbon/10 to-carbon/70"
           aria-hidden="true"

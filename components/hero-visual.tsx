@@ -149,7 +149,8 @@ export function HeroVisual({
     hasEntered ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0",
   ].join(" ");
   const fallbackMediaSrc = image?.src ?? video?.poster;
-  const shouldShowVideo = Boolean(video && shouldLoadVideo);
+  const activeVideo: HeroVisualProps["video"] | undefined =
+    shouldLoadVideo && video ? video : undefined;
 
   return (
     <section className="relative isolate w-full">
@@ -157,14 +158,14 @@ export function HeroVisual({
         ref={heroRef}
         className="relative h-screen min-h-[520px] w-full overflow-hidden bg-carbon"
       >
-        {shouldShowVideo ? (
+        {activeVideo ? (
           <video
-            poster={video.poster ?? image?.src}
+            poster={activeVideo.poster ?? image?.src}
             muted
             loop
             autoPlay
             playsInline
-            preload={video.preload ?? "metadata"}
+            preload={activeVideo.preload ?? "metadata"}
             className="h-full w-full object-cover"
             aria-label={mediaAlt}
           >

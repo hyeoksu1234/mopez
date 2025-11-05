@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import type { Preset } from "@/data/presets";
+import { usePixelReveal } from "@/hooks/use-pixel-reveal";
 
 type PresetCardProps = {
   preset: Preset;
@@ -14,6 +17,8 @@ export function PresetCard({
   imageStroke = false,
   infoStroke = false,
 }: PresetCardProps) {
+  const mediaRevealRef = usePixelReveal<HTMLDivElement>();
+
   const articleClassName = [
     "group flex flex-col overflow-hidden rounded-[24px] bg-off-white shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition hover:-translate-y-1 hover:shadow-[0_18px_42px_rgba(17,17,17,0.16)]",
     combinedStroke ? "border-[6px] border-electric-blue" : "",
@@ -38,15 +43,19 @@ export function PresetCard({
 
   return (
     <article className={articleClassName}>
-      <div className={mediaWrapperClassName}>
+      <div
+        ref={mediaRevealRef}
+        data-pixel-reveal="hidden"
+        className={mediaWrapperClassName}
+      >
         <Image
           src={preset.heroImage}
           alt={preset.name}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+          className="pixel-reveal-media object-cover transition duration-500 group-hover:scale-[1.03]"
         />
-        <div className="absolute left-4 top-4 flex gap-2">
+        <div className="absolute left-4 top-4 z-10 flex gap-2">
           {preset.sceneTags.map((tag) => (
             <span
               key={tag}

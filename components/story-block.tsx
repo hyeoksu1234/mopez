@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { usePixelReveal } from "@/hooks/use-pixel-reveal";
 
 type StoryBlockProps = {
   id?: string;
@@ -20,6 +23,7 @@ export function StoryBlock({
   image,
 }: StoryBlockProps) {
   const imageLeft = image.orientation === "left";
+  const mediaRevealRef = usePixelReveal<HTMLDivElement>();
 
   return (
     <section
@@ -43,6 +47,8 @@ export function StoryBlock({
       </div>
 
       <div
+        ref={mediaRevealRef}
+        data-pixel-reveal="hidden"
         className={`relative order-1 overflow-hidden rounded-[24px] aspect-[16/9] md:max-w-none ${
           imageLeft ? "md:order-1" : "md:order-2"
         }`}
@@ -51,7 +57,7 @@ export function StoryBlock({
           src={image.src}
           alt={image.alt}
           fill
-          className="object-cover"
+          className="pixel-reveal-media object-cover"
           sizes="(max-width: 768px) 95vw, (min-width: 1024px) 52vw, 52vw"
         />
       </div>

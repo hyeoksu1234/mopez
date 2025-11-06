@@ -27,9 +27,8 @@ export function PresetCard({
     .join(" ");
 
   const mediaWrapperClassName = [
-    "relative aspect-[4/5] overflow-hidden",
+    "relative aspect-[4/5]",
     combinedStroke ? "" : "rounded-[24px]",
-    imageStroke ? "border-[6px] border-electric-blue" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -48,13 +47,30 @@ export function PresetCard({
         data-pixel-reveal="hidden"
         className={mediaWrapperClassName}
       >
-        <Image
-          src={preset.heroImage}
-          alt={preset.name}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="pixel-reveal-media object-cover transition duration-500 group-hover:scale-[1.03]"
-        />
+        <div
+          className="relative h-full w-full overflow-hidden rounded-[24px]"
+          style={{
+            WebkitClipPath: "inset(0 round 24px)",
+            clipPath: "inset(0 round 24px)",
+          }}
+        >
+          <Image
+            src={preset.heroImage}
+            alt={preset.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="pixel-reveal-media object-cover transition duration-500 group-hover:scale-[1.03]"
+          />
+          {(combinedStroke || imageStroke) && (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-[24px] border-[6px]"
+              style={{
+                borderColor: "var(--color-electric-blue)",
+              }}
+            />
+          )}
+        </div>
         <div className="absolute left-4 top-4 z-10 flex gap-2">
           {preset.sceneTags.map((tag) => (
             <span

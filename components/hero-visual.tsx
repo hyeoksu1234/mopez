@@ -304,6 +304,10 @@ export function HeroVisual({
       if (event.pointerType === "mouse" && event.button !== 0) {
         return;
       }
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("[data-hero-carousel-control='true']")) {
+        return;
+      }
       state.pointerId = event.pointerId;
       state.startX = event.clientX;
       state.startY = event.clientY;
@@ -433,6 +437,7 @@ export function HeroVisual({
               type="button"
               onClick={handlePrev}
               className="grid h-10 w-10 place-items-center rounded-full bg-off-white/80 text-carbon shadow-lg transition hover:bg-off-white"
+              data-hero-carousel-control="true"
               aria-label="이전 영상"
             >
               ‹
@@ -450,6 +455,7 @@ export function HeroVisual({
                         ? "bg-off-white"
                         : "bg-off-white/40 hover:bg-off-white/75"
                     }`}
+                    data-hero-carousel-control="true"
                     aria-label={`영상 ${index + 1} 보기`}
                     aria-pressed={isActive}
                   />
@@ -460,6 +466,7 @@ export function HeroVisual({
               type="button"
               onClick={handleNext}
               className="grid h-10 w-10 place-items-center rounded-full bg-off-white/80 text-carbon shadow-lg transition hover:bg-off-white"
+              data-hero-carousel-control="true"
               aria-label="다음 영상"
             >
               ›

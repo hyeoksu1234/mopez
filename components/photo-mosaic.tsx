@@ -341,11 +341,11 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
             photo={photo}
             wrapperClassName={[
               tileClass,
-              "relative will-change-transform",
+              "group relative will-change-transform transition-transform duration-500 hover:-translate-y-1",
             ]
               .filter(Boolean)
               .join(" ")}
-            figureClassName="relative h-full w-full overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none"
+            figureClassName="relative h-full w-full overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] before:pointer-events-none after:pointer-events-none"
             tags={tags}
             plan={plan}
             globalProgress={puzzleProgress}

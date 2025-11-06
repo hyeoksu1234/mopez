@@ -172,6 +172,7 @@ type PhotoMosaicTileProps = {
   tags: GeneratedTag[];
   plan: PuzzlePlan;
   globalProgress: number;
+  strokeColor?: string;
 };
 
 function PhotoMosaicTile({
@@ -181,6 +182,7 @@ function PhotoMosaicTile({
   tags,
   plan,
   globalProgress,
+  strokeColor,
 }: PhotoMosaicTileProps) {
   const figureRef = usePixelReveal<HTMLElement>();
 
@@ -240,7 +242,9 @@ function PhotoMosaicTile({
     : { transform: `translate3d(${translateX}%, ${translateY}%, 0) rotate(${rotate}deg)` };
 
   const figureStyle: CSSProperties = {
-    boxShadow: shadow,
+    boxShadow: strokeColor
+      ? `${shadow}, 0 0 0 6px ${strokeColor}`
+      : shadow,
     WebkitMaskImage: "radial-gradient(white, white)",
     maskImage: "radial-gradient(white, white)",
     WebkitMaskComposite: "source-over",
@@ -299,6 +303,9 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
           index,
         );
         const strokeClass = getStrokeVariant(photo, index);
+        const strokeColor = strokeClass?.includes("border-electric-blue")
+          ? "var(--color-electric-blue)"
+          : undefined;
         const plan = puzzlePlans[index];
 
         const tags: GeneratedTag[] = [];
@@ -331,15 +338,11 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
             ]
               .filter(Boolean)
               .join(" ")}
-            figureClassName={[
-              "relative h-full w-full overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none",
-              strokeClass,
-            ]
-              .filter(Boolean)
-              .join(" ")}
+            figureClassName="relative h-full w-full overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none"
             tags={tags}
             plan={plan}
             globalProgress={puzzleProgress}
+            strokeColor={strokeColor}
           />
         );
       })}

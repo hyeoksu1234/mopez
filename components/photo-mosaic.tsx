@@ -239,7 +239,13 @@ function PhotoMosaicTile({
     ? { transform: "none" }
     : { transform: `translate3d(${translateX}%, ${translateY}%, 0) rotate(${rotate}deg)` };
 
-  const figureStyle: CSSProperties = { boxShadow: shadow };
+  const figureStyle: CSSProperties = {
+    boxShadow: shadow,
+    WebkitMaskImage: "radial-gradient(white, white)",
+    maskImage: "radial-gradient(white, white)",
+    WebkitMaskComposite: "source-over",
+    maskComposite: "add",
+  };
 
   return (
     <div

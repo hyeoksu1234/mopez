@@ -267,9 +267,11 @@ function PhotoMosaicTile({
         {strokeColor ? (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-[20px] border-[6px]"
+            className="pointer-events-none absolute inset-0 rounded-[20px]"
             style={{
+              border: "6px solid",
               borderColor: strokeColor,
+              boxSizing: "border-box",
               WebkitMaskImage: "radial-gradient(white, white)",
               maskImage: "radial-gradient(white, white)",
             }}

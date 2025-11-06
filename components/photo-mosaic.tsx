@@ -167,6 +167,7 @@ function getAxisProgress(
 
 type PhotoMosaicTileProps = {
   photo: PhotoTile;
+  wrapperClassName: string;
   figureClassName: string;
   tags: GeneratedTag[];
   plan: PuzzlePlan;
@@ -175,6 +176,7 @@ type PhotoMosaicTileProps = {
 
 function PhotoMosaicTile({
   photo,
+  wrapperClassName,
   figureClassName,
   tags,
   plan,
@@ -233,39 +235,40 @@ function PhotoMosaicTile({
     ? `0 ${Math.max(4, shadowStrength * 18)}px ${Math.max(12, shadowStrength * 36)}px rgba(17,17,17,${0.12 + shadowStrength * 0.22})`
     : "0 8px 24px rgba(17,17,17,0.08)";
 
-  const style: CSSProperties = isComplete
-    ? {
-        transform: "none",
-        boxShadow: shadow,
-      }
-    : {
-        transform: `translate3d(${translateX}%, ${translateY}%, 0) rotate(${rotate}deg)`,
-        boxShadow: shadow,
-      };
+  const containerStyle: CSSProperties = isComplete
+    ? { transform: "none" }
+    : { transform: `translate3d(${translateX}%, ${translateY}%, 0) rotate(${rotate}deg)` };
+
+  const figureStyle: CSSProperties = { boxShadow: shadow };
 
   return (
-    <figure
-      ref={figureRef}
-      data-pixel-reveal="hidden"
+    <div
       data-puzzle-piece
-      className={figureClassName}
-      style={style}
+      className={wrapperClassName}
+      style={containerStyle}
     >
-      <Image
-        src={photo.src}
-        alt={photo.alt}
-        fill
-        sizes="(max-width: 768px) 50vw, 25vw"
-        className="pixel-reveal-media object-cover"
-      />
-      <figcaption className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2 text-left text-xs uppercase tracking-[0.2em] text-off-white">
-        {tags.map((tag) => (
-          <span key={tag.id} className={tag.className}>
-            {tag.label}
-          </span>
-        ))}
-      </figcaption>
-    </figure>
+      <figure
+        ref={figureRef}
+        data-pixel-reveal="hidden"
+        className={figureClassName}
+        style={figureStyle}
+      >
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="pixel-reveal-media object-cover"
+        />
+        <figcaption className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2 text-left text-xs uppercase tracking-[0.2em] text-off-white">
+          {tags.map((tag) => (
+            <span key={tag.id} className={tag.className}>
+              {tag.label}
+            </span>
+          ))}
+        </figcaption>
+      </figure>
+    </div>
   );
 }
 
@@ -316,9 +319,14 @@ export function PhotoMosaic({ photos }: PhotoMosaicProps) {
           <PhotoMosaicTile
             key={photo.id}
             photo={photo}
-            figureClassName={[
-              "relative overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none",
+            wrapperClassName={[
               tileClass,
+              "relative will-change-transform",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            figureClassName={[
+              "relative h-full w-full overflow-hidden rounded-[20px] bg-soft-gray shadow-[0_8px_24px_rgba(17,17,17,0.08)] transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_20px_38px_rgba(17,17,17,0.18)] before:pointer-events-none after:pointer-events-none",
               strokeClass,
             ]
               .filter(Boolean)

@@ -61,7 +61,7 @@ export function PresetCard({
             sizes="(max-width: 768px) 100vw, 33vw"
             className="pixel-reveal-media object-cover transition duration-500 group-hover:scale-[1.03]"
           />
-          {(combinedStroke || imageStroke) && (
+          {imageStroke && (
             <span
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 rounded-[24px] border-[6px]"

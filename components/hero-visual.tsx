@@ -396,6 +396,7 @@ export function HeroVisual({
                     videoRefs.current[index] = element;
                   }}
                   poster={slide.poster ?? image?.src}
+                  autoPlay
                   muted
                   loop
                   playsInline

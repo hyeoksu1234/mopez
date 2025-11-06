@@ -242,7 +242,12 @@ function PhotoMosaicTile({
     : { transform: `translate3d(${translateX}%, ${translateY}%, 0) rotate(${rotate}deg)` };
 
   const figureStyle: CSSProperties = {
-    boxShadow: strokeColor ? `${shadow}, 0 0 0 6px ${strokeColor}` : shadow,
+    boxShadow: shadow,
+  };
+
+  const clipStyle: CSSProperties = {
+    WebkitClipPath: "inset(0 round 20px)",
+    clipPath: "inset(0 round 20px)",
   };
 
   return (
@@ -257,13 +262,25 @@ function PhotoMosaicTile({
         className={figureClassName}
         style={figureStyle}
       >
-        <Image
-          src={photo.src}
-          alt={photo.alt}
-          fill
-          sizes="(max-width: 768px) 50vw, 25vw"
-          className="pixel-reveal-media object-cover"
-        />
+        <div
+          className="relative h-full w-full overflow-hidden rounded-[20px]"
+          style={clipStyle}
+        >
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            fill
+            sizes="(max-width: 768px) 50vw, 25vw"
+            className="pixel-reveal-media h-full w-full object-cover"
+          />
+          {strokeColor ? (
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-[20px] border-[6px]"
+              style={{ borderColor: strokeColor }}
+            />
+          ) : null}
+        </div>
         <figcaption className="absolute left-4 top-4 z-20 flex flex-col items-start gap-2 text-left text-xs uppercase tracking-[0.2em] text-off-white">
           {tags.map((tag) => (
             <span key={tag.id} className={tag.className}>
